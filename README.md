@@ -6,6 +6,11 @@ This is the README for session4 - Numerics Part 2.
 
 This file contains information present in `session4.py` file and the test cases in `test_session4.py`.
 
+## Run Tests 
+
+```
+pytest -v
+```
 
 ## session4.py
 
