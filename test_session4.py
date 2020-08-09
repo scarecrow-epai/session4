@@ -2,9 +2,13 @@ import re
 import os
 import pytest
 import inspect
+import math
 import random
 import session4
-from decimal import Decimal
+from decimal import Decimal, getcontext
+
+getcontext().prec = 10   
+
 
 state_values = [1, -1, 0]
 README_CONTENT_CHECK_FOR = [
@@ -152,10 +156,11 @@ def test_sqrt():
    for i in range(10):
        q = session4.Qualean(random.choice(state_values))
 
-       assert q.__sqrt__() == Decimal(q.qnum).sqrt()
-
-
-
+       if q > 0:
+           assert q.__sqrt__() == Decimal(q.qnum).sqrt()
+       else:
+           assert type(q.__sqrt__()) == complex 
+        
 def test_bool():
     q1 = session4.Qualean(1)
     q2 = session4.Qualean(0)
@@ -165,22 +170,18 @@ def test_bool():
 
 
 def test_hundred_sum():
-    q = session4.Qualean(-1)  # random.choice(state_values))
-    q_100 = q.qnum * Decimal(100)
-    qlist = []
+    q = session4.Qualean(random.choice(state_values))
+    temp = 0
     for i in range(100):
-        qlist.append(q.qnum)
-    assert sum(qlist) == q_100
+        temp += q.qnum
+    assert math.isclose(temp, q*100, rel_tol=1e-5)
 
 
 def test_million_add():
-    q_init = session4.Qualean(0)
     for i in range(1000000):
         q = session4.Qualean(random.choice(state_values))
         q.qnum += q.qnum
-    #        q_init.qnum = q_init.qnum + q.qnum
-    print(q.qnum)
-    assert q.qnum == 0
+    assert math.isclose(q.qnum, 0, rel_tol = 1e-5)
 
 
 def test_and():
@@ -200,13 +201,13 @@ def test_or():
 def test_super_and():
     q1 = session4.Qualean(0)
 
-    assert q1.__and__(q2) == False
+    assert bool(q1 and q2) == False
 
 
 def test_super_or():
     q1 = session4.Qualean(1)
 
-    assert q1.__or__(q2) == True
+    assert bool(q1 or (q2)) == True
 
 
 

@@ -1,5 +1,8 @@
 from decimal import Decimal, getcontext
 import random
+import cmath
+
+getcontext().prec = 10
 
 
 class Qualean:
@@ -9,8 +12,6 @@ class Qualean:
     """
 
     def __init__(self, real_state):
-
-        getcontext().prec = 10
 
         self.real_state = real_state
 
@@ -26,40 +27,58 @@ class Qualean:
         self.qnum = self.real_state * self.imaginary_state
 
     def __add__(self, value):
-        if type(value) == int:
-            return self.qnum + value
-        else:
+        if isinstance(value, Qualean):
             return self.qnum + value.qnum
+        else:
+            return self.qnum + value
 
     def __eq__(self, value):
-        return self.qnum == value.qnum
+        if isinstance(value, Qualean):
+            return self.qnum == value.qnum
+        else:
+            return self.qnum == value
 
     def __float__(self):
         return float(self.qnum)
 
     def __ge__(self, value):
-        return self.qnum >= value.qnum
+        if isinstance(value, Qualean):
+            return self.qnum >= value.qnum
+        else:
+            return self.qnum >= value
 
     def __gt__(self, value):
-        return self.qnum > value.qnum
+        if isinstance(value, Qualean):
+            return self.qnum > value.qnum
+        else:
+            return self.qnum > value
 
     def __le__(self, value):
-        return self.qnum <= value.qnum
+        if isinstance(value, Qualean):
+            return self.qnum <= value.qnum
+        else:
+            return self.qnum <= value
 
     def __lt__(self, value):
-        return self.qnum < value.qnum
+        if isinstance(value, Qualean):
+            return self.qnum < value.qnum
+        else:
+            return self.qnum < value
 
     def __mul__(self, value):
-        if type(value) == int:
-            return self.qnum * value
-        else:
+        if isinstance(value, Qualean):
             return self.qnum * value.qnum
+        else:
+            return self.qnum * value
 
     def __invertsign__(self):
         return self.qnum.copy_negate()
 
-#    def __sqrt__(self):
-#        return self.qnum.sqrt()
+    def __sqrt__(self):
+        if self.qnum > 0:
+            return self.qnum.sqrt()
+        else:
+            return cmath.sqrt(self.qnum)
 
     def __bool__(self):
         return self.qnum != 0
@@ -75,16 +94,3 @@ class Qualean:
 
     def __or__(self, value):
         return bool(self.qnum) or bool(value.qnum)
-
-
-
-q1 = Qualean(1)
-q2 = Qualean(1)
-
-##print(q1, q2)
-#print(type(q1), type(q2))
-#print(q1.qnum, q2.qnum)
-#print(type(q1.qnum), type(q2.qnum))
-#
-#print(q1.__sqrt__())
-#print(Decimal(q1.qnum))
