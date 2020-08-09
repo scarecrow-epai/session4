@@ -9,7 +9,7 @@ This file contains information present in `session4.py` file and the test cases 
 ## Run Tests 
 
 ```
-pytest -v
+pytest -v  
 ```
 
 ## session4.py
